@@ -14,13 +14,13 @@ public class HexMap_cintinent : HexMap {
         for (int c = 0; c < numContinents; c++)
         {
             
-            int numSplats = Random.Range(4, 8);
+            int numSplats = Random.Range(8, 12);
             for (int i = 0; i < numSplats; i++)
             {
                 difficuly++;
                 int range = Random.Range(5, 8);
                 int y = Random.Range(range, numRows - range);
-                int x = Random.Range(0, 10) - y / 2 + (c * continentSpacing);
+                int x = Random.Range(0, 20) - y / 2 + (c * continentSpacing);
                 ElevateArea(x, y, difficuly, range);
                 GetHexAt(x, y).city = true;
             }
