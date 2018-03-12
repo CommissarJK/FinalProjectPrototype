@@ -13,7 +13,7 @@ public class CameraMouseController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+/*
         //Click and Drag
         Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         float rayLength = (mouseRay.origin.y / mouseRay.direction.y);
@@ -62,6 +62,6 @@ public class CameraMouseController : MonoBehaviour {
             Camera.main.transform.rotation = Quaternion.Euler(Mathf.Lerp(30, 80, p.y/ maxHeight),
             Camera.main.transform.rotation.eulerAngles.y,
             Camera.main.transform.rotation.eulerAngles.z);
-        }
+        }*/
 	}
 }
