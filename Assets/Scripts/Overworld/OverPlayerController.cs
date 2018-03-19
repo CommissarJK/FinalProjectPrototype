@@ -14,7 +14,7 @@ public class OverPlayerController : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
+        aboveHeadText.gameObject.transform.parent.gameObject.SetActive(false);
     }
     // Update is called once per frame
     void Update()

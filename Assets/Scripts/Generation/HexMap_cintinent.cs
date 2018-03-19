@@ -6,7 +6,7 @@ public class HexMap_cintinent : HexMap {
     override public void GenerateMap() {
         // First call the base version to load all the hexes as ocean
         base.GenerateMap();
-        int numContinents = 1;
+        int numContinents = 2;
         int continentSpacing = numColumns/numContinents;
         int difficuly = 0;
 
@@ -14,7 +14,7 @@ public class HexMap_cintinent : HexMap {
         for (int c = 0; c < numContinents; c++)
         {
             
-            int numSplats = Random.Range(8, 12);
+            int numSplats = Random.Range(4, 8);
             for (int i = 0; i < numSplats; i++)
             {
                 difficuly++;
