@@ -1,0 +1,44 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 20.04.2013 18:34:24
+
+newmtl Material__194
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\User\Desktop\Bloathead Sorcerer\c4160_unpack\c4160_WP_A_0920.dds
+	map_Kd C:\Users\User\Desktop\Bloathead Sorcerer\c4160_unpack\c4160_WP_A_0920.dds
+
+newmtl Material__192
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\User\Desktop\Bloathead Sorcerer\c4160_unpack\c4160.dds
+	map_Kd C:\Users\User\Desktop\Bloathead Sorcerer\c4160_unpack\c4160.dds
+
+newmtl Material__193
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka C:\Users\User\Desktop\Bloathead Sorcerer\c4160_unpack\c4160_HD_A_4160.dds
+	map_Kd C:\Users\User\Desktop\Bloathead Sorcerer\c4160_unpack\c4160_HD_A_4160.dds

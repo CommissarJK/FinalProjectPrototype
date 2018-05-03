@@ -18,8 +18,8 @@ public class Fighter {
     protected int defencePre = 0;
     protected bool KO = false;
     protected bool active = false;
-    protected bool queued = false;
     protected int prefab;
+    protected FighterAnimations anime;
 
     public void Tick() {
         if (!active && !KO)
@@ -39,8 +39,9 @@ public class Fighter {
         timer = 0;
     }
 
-    public void TakeDamage(int damage) {
+    virtual public void TakeDamage(int damage) {
         HP -= damage;
+        anime.Damaged();
         if (HP <= 0) {
             HP = 0;
             KO = true;
@@ -48,6 +49,19 @@ public class Fighter {
         }
     }
 
+    public void TakeHealing(int healing) {
+        HP += healing;
+        if (HP > 0)
+        {
+            KO = false;
+            timer = 0f;
+        }
+    }
+
+    public void Attack() { anime.Attack(); }
+    public void Cast() { anime.Cast(); }
+    public void setAnime(FighterAnimations _anime) { this.anime = _anime; }
+    //public FighterAnimations getAnime() { return anime; }
     public float getTimer() { return timer; }
 
     public string getname() { return name; }
@@ -61,10 +75,7 @@ public class Fighter {
     public bool getKO() { return KO; }
     public int getPrefab() { return prefab; }
     public bool getActive() { return active; }
-    public bool getQueued() { return queued; }
-    public void setQueued(bool state) {  queued = state; }
     public void reset() {
-        queued = false;
         active = false;
         timer = 0f;
     }

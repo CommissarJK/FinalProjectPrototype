@@ -59,6 +59,11 @@ public class CameraControl : MonoBehaviour
     }
     public void BattleCameraSet() {
         transform.rotation = Quaternion.Euler(10, 10, 0);
-        transform.position = new Vector3(-0.5f, 2f, 198f);
+        transform.position = new Vector3(-0.5f, 2f, 598f);
+    }
+    public void ResetCamera() {
+        transform.rotation = Quaternion.Euler(60, 0, 0);
+        transform.position = new Vector3(PlayerPos.position.x, PlayerPos.position.y + 2.5f, PlayerPos.position.z - 1.5f);
+        battleStarting = false;
     }
 }

@@ -6,12 +6,16 @@ public class Action {
     public Ability ability;
     public Fighter user;
     public Fighter target;
+    protected int timer;
 
     public Action(Ability _ability, Fighter _user, Fighter _target) {
         this.user = _user;
         this.target = _target;
         this.ability = _ability;
+        timer = ability.getTimer();
     }
+
+    public void Animate() { }
 
     public void Activate() {
         ability.Activate(user, target);

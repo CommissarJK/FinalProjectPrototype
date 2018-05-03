@@ -110,7 +110,6 @@ public class HexMap : MonoBehaviour {
                 hexGO.GetComponent<HexComponent>().hex = h;
                 hexGO.GetComponent<HexComponent>().hexMap = this;
 
-                //hexGO.GetComponentInChildren<TextMesh>().text = string.Format("{0}", "");
                 hexGO.GetComponentInChildren<TextMesh>().text = string.Format("{0},{1}", column, row);
             }
         }
@@ -126,69 +125,36 @@ public class HexMap : MonoBehaviour {
                 GameObject hexGO = hexToGameObjectMap[h];
                 MeshRenderer mr = hexGO.GetComponentInChildren<MeshRenderer>();
                 MeshFilter mf = hexGO.GetComponentInChildren<MeshFilter>();
+                MeshCollider mc = hexGO.GetComponentInChildren<MeshCollider>();
 
-                //check height
-                if (h.elevation >= HeightMountain)
+                if (h.city)
                 {
-                    mf.mesh = MeshMountain;
-                    mr.material = MatMountains;
-                }
-                else if(h.elevation >= HeightHill)
-                {
-                    mf.mesh = MeshHill;
-                }
-                else if(h.elevation >= HeightFlat)
-                {
-                    mf.mesh = MeshFlat;
-                }
-                else if (h.elevation >= HeightCoast)
-                {
-                    mf.mesh = MeshWater;
-                    mr.material = MatCoast;
-                }
-                if (h.elevation < HeightCoast)
-                {
-                    mf.mesh = MeshWater;
-                    bool coast = false;
-                    Hex[] hNeighbours = GetHexesInRange(h, 2);
-                    foreach (Hex hn in hNeighbours) {
-                        if (hn.elevation >= 0.1f) {
-                            coast = true;
-                            break;
-                        }
-                    }
-                    if (coast)
-                    {
-                        mr.material = MatCoast;
-                    }
-                    else {
-                        mr.material = MatOcean;
-                    }
-                }
-
-                //check moisture
-                if (h.city) {
-                    mf.mesh = MeshFlat;
-                    mr.material = MatGrasslands;
+                    h.elevation = HeightFlat + 0.1f;
                     Vector3 p = hexGO.transform.position;
                     Instantiate(CityPrefab, p, Quaternion.identity, hexGO.transform);
                 }
-                else if (h.elevation >= HeightFlat && h.elevation < HeightMountain)
+
+                if (h.elevation >= HeightFlat)
                 {
                     if (h.moisture >= MoistureJungle)
                     {
                         mr.material = MatGrasslands;
-                        Vector3 p = hexGO.transform.position;
-                        if(h.elevation >= HeightHill) { p.y += 0.25f; }
-                        
-                        Instantiate(ForestPrefab, p, Quaternion.identity, hexGO.transform);
+                        if (h.elevation < HeightMountain)
+                        {
+                            Vector3 p = hexGO.transform.position;
+                            if (h.elevation >= HeightHill) { p.y += 0.25f; }
+                            Instantiate(ForestPrefab, p, Quaternion.identity, hexGO.transform);
+                        }
                     }
                     else if (h.moisture >= MoistureForest)
                     {
                         mr.material = MatGrasslands;
-                        Vector3 p = hexGO.transform.position;
-                        if (h.elevation >= HeightHill) { p.y += 0.25f; }
-                        Instantiate(ForestPrefab, p, Quaternion.identity, hexGO.transform);
+                        if (h.elevation < HeightMountain)
+                        {
+                            Vector3 p = hexGO.transform.position;
+                            if (h.elevation >= HeightHill) { p.y += 0.25f; }
+                            Instantiate(ForestPrefab, p, Quaternion.identity, hexGO.transform);
+                        }
                     }
                     else if (h.moisture >= MoistureGrasslands)
                     {
@@ -203,6 +169,47 @@ public class HexMap : MonoBehaviour {
                         mr.material = MatDesert;
                     }
                 }
+
+                //check height
+                if (h.elevation >= HeightMountain)
+                {
+                    mf.mesh = MeshMountain;
+                    mr.material = MatMountains;
+                    mc.sharedMesh = MeshMountain;
+                }
+                else if (h.elevation >= HeightHill)
+                {
+                    mf.mesh = MeshHill;
+                    mc.sharedMesh = MeshHill;
+                }
+                else if (h.elevation >= HeightFlat)
+                {
+                    mf.mesh = MeshFlat;
+                }
+                else if (h.elevation >= HeightCoast)
+                {
+                    mf.mesh = MeshWater;
+                    mr.material = MatCoast;
+                }
+                if (h.elevation < HeightCoast)
+                {
+                    mf.mesh = MeshWater;
+                    bool coast = false;
+                    Hex[] hNeighbours = GetHexesInRange(h, 2);
+                    foreach (Hex hn in hNeighbours) {
+                        if (hn.elevation >= HeightFlat) {
+                            coast = true;
+                            break;
+                        }
+                    }
+                    if (coast)
+                    {
+                        mr.material = MatCoast;
+                    }
+                    else {
+                        mr.material = MatOcean;
+                    }
+                }
             }
         }
     }
@@ -210,11 +217,11 @@ public class HexMap : MonoBehaviour {
     public Hex[] GetHexesInRange(Hex centerHex, int range) {
         List<Hex> results = new List<Hex>();
         
-        for (int dx = -range; dx < range-1; dx++) {
-            for (int dy = Mathf.Max(-range+1,-dx-range); dy < Mathf.Min(range, -dx + range-1); dy++)
+        for (int dx = -range; dx < range; dx++) {
+            for (int dy = Mathf.Max(-range,-dx-range); dy < Mathf.Min(range, -dx + range); dy++)
             {
                 //results.Add(hexes[centerHex.Q + dx, centerHex.R + dy]);
-                results.Add(GetHexAt(centerHex.Q + dx+1, centerHex.R + dy));
+                results.Add(GetHexAt(centerHex.Q + dx, centerHex.R + dy));
             }
         }
         return results.ToArray();

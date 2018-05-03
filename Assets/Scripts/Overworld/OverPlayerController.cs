@@ -28,6 +28,8 @@ public class OverPlayerController : MonoBehaviour {
             {
                 transform.position += InputManager.MainJoystick() * Time.deltaTime * movementSpeed;
                 transform.rotation = Quaternion.LookRotation(InputManager.MainJoystick());
+                float distanceTraveled = InputManager.MainJoystick().magnitude * Time.deltaTime * movementSpeed;
+                battler.AddDistance(distanceTraveled);
             }
         }
     }

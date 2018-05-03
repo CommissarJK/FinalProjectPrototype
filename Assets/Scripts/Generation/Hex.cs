@@ -4,13 +4,11 @@ using System.Collections;
 
 
 public class Hex {
-    // Q + R + S = 0 always
-    // therefore S = -(Q + R)
+
     public readonly int Q; // Column
     public readonly int R; // Row
-    public readonly int S;
+    public readonly int S; // 3D Coordinate
 
-    //Data for map generation and maybe ingame effects
     public float elevation;
     public float moisture;
     public bool city = false;

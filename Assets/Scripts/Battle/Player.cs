@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : Fighter {
 
     // Use this for initialization
-    public Player(string _name, int _strength = 10, int _dexterity = 10, int _vitality = 10, int _intellect = 10, int _prefab = 0) {
+    public Player(string _name, int _strength, int _dexterity, int _vitality, int _intellect, int _prefab, List<int> _abilities) {
         this.name = _name;
         this.strength = _strength;
         this.dexterity = _dexterity;
@@ -15,5 +15,17 @@ public class Player : Fighter {
         maxHP = this.vitality * 10;
         HP = maxHP;
         List<int> abilities = new List<int>();
+    }
+
+    override public void TakeDamage(int damage)
+    {
+        HP -= damage;
+        anime.Damaged();
+        if (HP <= 0)
+        {
+            HP = 0;
+            KO = true;
+            timer = 0f;
+        }
     }
 }
