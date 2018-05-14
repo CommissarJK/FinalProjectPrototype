@@ -26,13 +26,13 @@ public class AbilityUI : MonoBehaviour {
         switch(i)
         {
             case 0:
-                gameObject.transform.position =  pos + new Vector3(-160, 0, 0);
+                gameObject.transform.position =  pos + new Vector3(-450, 0, 0);
                 break;
             case 1:
                 gameObject.transform.position = pos;
                 break;
             case 2:
-                gameObject.transform.position = pos + new Vector3(160, 0, 0);
+                gameObject.transform.position = pos + new Vector3(450, 0, 0);
                 break;
         }
 
