@@ -39,7 +39,7 @@ public class Fighter {
         timer = 0;
     }
 
-    virtual public void TakeDamage(int damage) {
+    virtual public void TakeDamage(int damage, int element = -1) {
         HP -= damage;
         anime.Damaged();
         if (HP <= 0) {
@@ -49,9 +49,14 @@ public class Fighter {
         }
     }
 
+    virtual public float GetBonusDamage() { return 1f; }
+
     public void TakeHealing(int healing) {
         HP += healing;
-        if (HP > 0)
+        if (HP > maxHP) {
+            //HP = maxHP;
+        }
+        if (KO && HP > 0)
         {
             KO = false;
             timer = 0f;
@@ -75,6 +80,7 @@ public class Fighter {
     public bool getKO() { return KO; }
     public int getPrefab() { return prefab; }
     public bool getActive() { return active; }
+    public int getAbility(int i) { return abilities[i]; }
     public void reset() {
         active = false;
         timer = 0f;

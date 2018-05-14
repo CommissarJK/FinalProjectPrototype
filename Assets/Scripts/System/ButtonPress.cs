@@ -33,14 +33,14 @@ public class ButtonPress : MonoBehaviour {
                 }
                 break;
             case 2:
-                if (InputManager.Xbutton())
+                if (InputManager.Ybutton())
                 {
                     timer = 0.5f;
                     buttonImg.color = new Color32(105, 105, 105, 255);
                 }
                 break;
             case 3:
-                if (InputManager.Ybutton())
+                if (InputManager.Xbutton())
                 {
                     timer = 0.5f;
                     buttonImg.color = new Color32(105, 105, 105, 255);

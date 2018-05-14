@@ -24,7 +24,8 @@ public class HexMap_cintinent : HexMap {
                 GetHexAt(x, y).city = true;
                 if (!playerPosSet)
                 {
-                    Vector3 pos = GetHexAt(x, y).PositionFromCamera(Camera.main.transform.position, numColumns, numRows);
+                    Vector3 pos = GetHexAt(x, y+1).PositionFromCamera(Camera.main.transform.position, numColumns, numRows);
+                    GameObject.Find("Player").GetComponent<OverPlayerController>().setStartPos(pos);
                     playerPosSet = true;
                 }
             }

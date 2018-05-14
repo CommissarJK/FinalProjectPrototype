@@ -5,12 +5,21 @@ using UnityEngine;
 public class Action {
     public Ability ability;
     public Fighter user;
-    public Fighter target;
+    public List<Fighter> targets;
     protected int timer;
 
     public Action(Ability _ability, Fighter _user, Fighter _target) {
         this.user = _user;
-        this.target = _target;
+        this.targets = new List<Fighter>();
+        this.targets.Add(_target);
+        this.ability = _ability;
+        timer = ability.getTimer();
+    }
+
+    public Action(Ability _ability, Fighter _user, List<Fighter> _target)
+    {
+        this.user = _user;
+        this.targets = _target;
         this.ability = _ability;
         timer = ability.getTimer();
     }
@@ -18,6 +27,9 @@ public class Action {
     public void Animate() { }
 
     public void Activate() {
-        ability.Activate(user, target);
+        for (int i = 0; i < targets.Count; i++)
+        {
+            ability.Activate(user, targets[i]);
+        }
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BattleControl : MonoBehaviour {
+    public OverPlayerController Oplayer;
+
     public CameraControl cameraRef;
     public bool activeBattle = false;
     public bool startingBattle = false;
@@ -16,16 +18,22 @@ public class BattleControl : MonoBehaviour {
     public List<GameObject> totalPrefabs;
     public Transform playerTransform;
     public Transform enemyTransform;
+ 
 
     protected Action currentAction;
     protected List<Ability> abilityList;
     protected bool activeFighter = false;
     protected int activePlayer;
 
+    protected int exp = 0;
+    protected int level = 1;
+    protected int gearLevel = 0;
+
     protected float battleCounter = 0;
 
     public GameObject overworldUI;
     public GameObject battleUI;
+    public AbilityUI abilityUI;
 
     // Use this for initialization
     void Start () {
@@ -48,14 +56,14 @@ public class BattleControl : MonoBehaviour {
         tempAbilities.Add(1);
         tempAbilities.Add(4);
         tempAbilities.Add(5);
-        players.Add(new Player("Paladin",15, 10, 10, 10, 0, tempAbilities));
+        players.Add(new Player("Paladin",15, 10, 15, 10, 0, tempAbilities));
 
         tempAbilities = new List<int>();
         tempAbilities.Add(0);
         tempAbilities.Add(3);
         tempAbilities.Add(4);
         tempAbilities.Add(5);
-        players.Add(new Player("Ranger",10, 20, 15, 10, 1, tempAbilities));
+        players.Add(new Player("Ranger",10, 20, 10, 10, 1, tempAbilities));
 
         tempAbilities = new List<int>();
         tempAbilities.Add(0);
@@ -75,24 +83,26 @@ public class BattleControl : MonoBehaviour {
         tempAbilities = new List<int>();
         tempAbilities.Add(0);
         tempAbilities.Add(4);
-        bestiary.Add(new Enemy("Orc",1, 4, 10, 10, 3, tempAbilities));
+        bestiary.Add(new Enemy("Orc",1, 4, 1, 10, 3, tempAbilities, 75));
 
         tempAbilities = new List<int>();
         tempAbilities.Add(0);
         tempAbilities.Add(2);
-        bestiary.Add(new Enemy("Ogre", 1, 5, 10, 10, 3, tempAbilities));
+        bestiary.Add(new Enemy("Ogre", 1, 5, 1, 10, 3, tempAbilities, 100));
 
-        enemyTransform.position = enemyTransform.position + new Vector3(3, 0, 0);
+        enemyTransform.position += new Vector3(3, 0, 0);
     }
 
 
 
     // Update is called once per frame
-    void Update() {
+    void Update()
+    {
         if (!activeBattle && !startingBattle)
-        { 
+        {
             overworldUI.SetActive(true);
-        } else
+        }
+        else
         {
             overworldUI.SetActive(false);
         }
@@ -100,6 +110,17 @@ public class BattleControl : MonoBehaviour {
         if (activeBattle)
         {
             battleUI.SetActive(true);
+            if (NeedInput())
+            {
+                abilityUI.gameObject.SetActive(true);
+                abilityUI.SetPos(activePlayer);
+                abilityUI.SetAbilities(abilityList[players[activePlayer].getAbility(0)].getname(), abilityList[players[activePlayer].getAbility(1)].getname(),
+                    abilityList[players[activePlayer].getAbility(2)].getname(), abilityList[players[activePlayer].getAbility(3)].getname());
+            }
+            else {
+                abilityUI.gameObject.SetActive(false);
+            }
+            
         }
         else
         {
@@ -127,9 +148,50 @@ public class BattleControl : MonoBehaviour {
         if (activeBattle) {
             if (NeedInput())
             {
+                List<Fighter> tempAOE = new List<Fighter>();
+                for (int i = 0; i < players.Count; i++) {
+                    tempAOE.Add(players[i]);
+                }
+
                 if (InputManager.Abutton())
                 {
-                    currentAction = new Action(abilityList[0], players[activePlayer], enemies[Random.Range(0, enemies.Count)]);
+                    if (!abilityList[players[activePlayer].getAbility(0)].getAOE())
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(0)], players[activePlayer], enemies[Random.Range(0, enemies.Count)]);
+                    }
+                    else
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(0)], players[activePlayer], tempAOE);
+                    }
+                } else if (InputManager.Bbutton())
+                {
+                    if (!abilityList[players[activePlayer].getAbility(1)].getAOE())
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(1)], players[activePlayer], enemies[Random.Range(0, enemies.Count)]);
+                    }
+                    else
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(1)], players[activePlayer], tempAOE);
+                    }
+                } else if (InputManager.Ybutton())
+                {
+                    if (!abilityList[players[activePlayer].getAbility(2)].getAOE())
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(2)], players[activePlayer], enemies[Random.Range(0, enemies.Count)]);
+                    }
+                    else
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(2)], players[activePlayer], tempAOE);
+                    }
+                } else if (InputManager.Xbutton())
+                {
+                    if (!abilityList[players[activePlayer].getAbility(3)].getAOE())
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(3)], players[activePlayer], enemies[Random.Range(0, enemies.Count)]);
+                    }
+                    else {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(3)], players[activePlayer], tempAOE);
+                    }
                 }
             }
 
@@ -142,6 +204,11 @@ public class BattleControl : MonoBehaviour {
                     {
                         activePlayer = i;
                         activeFighter = true;
+                        string temp1 = abilityList[players[activePlayer].getAbility(0)].getname();
+                        string temp2 = abilityList[players[activePlayer].getAbility(1)].getname();
+                        string temp3 = abilityList[players[activePlayer].getAbility(2)].getname();
+                        string temp4 = abilityList[players[activePlayer].getAbility(3)].getname();
+                        Debug.Log(temp1 + ", " + temp2 + ", " + temp3 + ", " + temp4);
                         break;
                     }
                     else
@@ -155,7 +222,7 @@ public class BattleControl : MonoBehaviour {
                         enemy.Tick();
                         if (enemy.getActive())
                         {
-                            currentAction = new Action(abilityList[0], enemy, players[Random.Range(0,players.Count)]);
+                            currentAction = new Action(abilityList[enemy.PickAbility()], enemy, players[Random.Range(0,players.Count)]);
                         }
                     }
                 }
@@ -169,11 +236,39 @@ public class BattleControl : MonoBehaviour {
             CheckKO();
             if (AllEnemyKO()) {
                 activeBattle = false;
+                int expGained = 0;
+                for (int i = 0; i < enemies.Count; i++) {
+                    expGained += enemies[i].getEXP();
+                }
+                expGained *= Oplayer.getClosestCity().getLevel();
+                int bonus = (int)((float)exp * 0.10f);
+                exp += expGained + bonus;
+                Oplayer.addExpToCity(expGained);
+                Oplayer.addGold(expGained * Oplayer.getClosestCity().getLevel());
                 cameraRef.ResetCamera();
                 enemies.Clear();
                 enemyPrefabs.Clear();
             }
+
         }
+    }
+
+    public void levelUp()
+    {
+        int neededToLevel = (level * level) * 100;
+        if (exp >= neededToLevel)
+        {
+            exp -= neededToLevel;
+            level++;
+            levelUp();
+        }
+        for (int i = 0; i < players.Count; i++) {
+            players[i].levelUp(level);
+        }
+    }
+
+    public void upgradeGear() {
+        gearLevel++;
     }
 
     public void AddDistance(float distance) {
@@ -181,8 +276,8 @@ public class BattleControl : MonoBehaviour {
     }
 
     private void LoadBattle(int battleSize) {
-        Debug.Log(enemies.Count);
-        for (int i = 0; i < battleSize; i++)
+        
+        for (int i = 0; i < 2; i++)
         {
             enemies.Add(bestiary[i].Clone());
             enemyPrefabs.Add(Instantiate(totalPrefabs[enemies[i].getPrefab()], new Vector3(0, 0, 0), Quaternion.identity) as GameObject);
@@ -195,6 +290,7 @@ public class BattleControl : MonoBehaviour {
             enemies[i].setID(i);
             enemies[i].setAnime(enemyPrefabs[i].GetComponent<FighterAnimations>());
         }
+        Debug.Log(enemies.Count);
     }
 
     protected bool NeedInput() {
@@ -268,5 +364,9 @@ public class BattleControl : MonoBehaviour {
         //Debug.Log(players[pIndex].getmaxHP());
         return players[pIndex].getTimer();
     }
+
+    public int getPlayerEXP() { return exp; }
+    public int getPlayerlevel() { return level; }
+    public int getPlayerGear() { return gearLevel; }
 
 }

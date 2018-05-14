@@ -59,7 +59,7 @@ public class CameraControl : MonoBehaviour
     }
     public void BattleCameraSet() {
         transform.rotation = Quaternion.Euler(10, 10, 0);
-        transform.position = new Vector3(-0.5f, 2f, 598f);
+        transform.position = new Vector3(0.7f, 1.7f, 598f);
     }
     public void ResetCamera() {
         transform.rotation = Quaternion.Euler(60, 0, 0);
