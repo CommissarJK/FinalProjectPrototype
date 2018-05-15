@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BattleControl : MonoBehaviour {
     public OverPlayerController Oplayer;
@@ -26,6 +27,7 @@ public class BattleControl : MonoBehaviour {
     protected int activePlayer;
     protected int target = 0;
     protected float targetTimer = 0;
+    public Text TargetUI;
 
     protected int exp = 0;
     protected int level = 1;
@@ -135,8 +137,8 @@ public class BattleControl : MonoBehaviour {
                     Debug.Log(target);
                 }
             }
-            
-            
+
+            TargetUI.text = "Target: " + target;
 
             if (NeedInput())
             {
