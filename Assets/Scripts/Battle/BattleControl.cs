@@ -24,6 +24,8 @@ public class BattleControl : MonoBehaviour {
     protected List<Ability> abilityList;
     protected bool activeFighter = false;
     protected int activePlayer;
+    protected int target = 0;
+    protected float targetTimer = 0;
 
     protected int exp = 0;
     protected int level = 1;
@@ -83,12 +85,12 @@ public class BattleControl : MonoBehaviour {
         tempAbilities = new List<int>();
         tempAbilities.Add(0);
         tempAbilities.Add(4);
-        bestiary.Add(new Enemy("Orc",1, 4, 1, 10, 3, tempAbilities, 75));
+        bestiary.Add(new Enemy("Orc",5, 12, 5, 10, 3, tempAbilities, 75));
 
         tempAbilities = new List<int>();
         tempAbilities.Add(0);
         tempAbilities.Add(2);
-        bestiary.Add(new Enemy("Ogre", 1, 5, 1, 10, 3, tempAbilities, 100));
+        bestiary.Add(new Enemy("Ogre", 5, 9, 5, 10, 3, tempAbilities, 100));
 
         enemyTransform.position += new Vector3(3, 0, 0);
     }
@@ -110,12 +112,91 @@ public class BattleControl : MonoBehaviour {
         if (activeBattle)
         {
             battleUI.SetActive(true);
+            targetTimer -= 1f * Time.deltaTime;
+            if (targetTimer <= 0f)
+            {
+                if (InputManager.MainHorizontal() > 0.2f)
+                {
+                    target--;
+                    targetTimer = 0.5f;
+                    if (target < 0) {
+                        target = enemies.Count - 1;
+                    }
+                    Debug.Log(target);
+                }
+                else if (InputManager.MainHorizontal() < -0.2f)
+                {
+                    target++;
+                    targetTimer = 0.5f;
+                    if (target >= enemies.Count)
+                    {
+                        target = 0;
+                    }
+                    Debug.Log(target);
+                }
+            }
+            
+            
+
             if (NeedInput())
             {
                 abilityUI.gameObject.SetActive(true);
                 abilityUI.SetPos(activePlayer);
                 abilityUI.SetAbilities(abilityList[players[activePlayer].getAbility(0)].getname(), abilityList[players[activePlayer].getAbility(1)].getname(),
                     abilityList[players[activePlayer].getAbility(2)].getname(), abilityList[players[activePlayer].getAbility(3)].getname());
+
+                
+
+                List<Fighter> tempAOE = new List<Fighter>();
+                for (int i = 0; i < players.Count; i++)
+                {
+                    tempAOE.Add(players[i]);
+                }
+
+                if (InputManager.Abutton())
+                {
+                    if (!abilityList[players[activePlayer].getAbility(0)].getAOE())
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(0)], players[activePlayer], enemies[target]);
+                    }
+                    else
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(0)], players[activePlayer], tempAOE);
+                    }
+                }
+                else if (InputManager.Bbutton())
+                {
+                    if (!abilityList[players[activePlayer].getAbility(1)].getAOE())
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(1)], players[activePlayer], enemies[target]);
+                    }
+                    else
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(1)], players[activePlayer], tempAOE);
+                    }
+                }
+                else if (InputManager.Ybutton())
+                {
+                    if (!abilityList[players[activePlayer].getAbility(2)].getAOE())
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(2)], players[activePlayer], enemies[target]);
+                    }
+                    else
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(2)], players[activePlayer], tempAOE);
+                    }
+                }
+                else if (InputManager.Xbutton())
+                {
+                    if (!abilityList[players[activePlayer].getAbility(3)].getAOE())
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(3)], players[activePlayer], enemies[target]);
+                    }
+                    else
+                    {
+                        currentAction = new Action(abilityList[players[activePlayer].getAbility(3)], players[activePlayer], tempAOE);
+                    }
+                }
             }
             else {
                 abilityUI.gameObject.SetActive(false);
@@ -148,51 +229,7 @@ public class BattleControl : MonoBehaviour {
         if (activeBattle) {
             if (NeedInput())
             {
-                List<Fighter> tempAOE = new List<Fighter>();
-                for (int i = 0; i < players.Count; i++) {
-                    tempAOE.Add(players[i]);
-                }
-
-                if (InputManager.Abutton())
-                {
-                    if (!abilityList[players[activePlayer].getAbility(0)].getAOE())
-                    {
-                        currentAction = new Action(abilityList[players[activePlayer].getAbility(0)], players[activePlayer], enemies[Random.Range(0, enemies.Count)]);
-                    }
-                    else
-                    {
-                        currentAction = new Action(abilityList[players[activePlayer].getAbility(0)], players[activePlayer], tempAOE);
-                    }
-                } else if (InputManager.Bbutton())
-                {
-                    if (!abilityList[players[activePlayer].getAbility(1)].getAOE())
-                    {
-                        currentAction = new Action(abilityList[players[activePlayer].getAbility(1)], players[activePlayer], enemies[Random.Range(0, enemies.Count)]);
-                    }
-                    else
-                    {
-                        currentAction = new Action(abilityList[players[activePlayer].getAbility(1)], players[activePlayer], tempAOE);
-                    }
-                } else if (InputManager.Ybutton())
-                {
-                    if (!abilityList[players[activePlayer].getAbility(2)].getAOE())
-                    {
-                        currentAction = new Action(abilityList[players[activePlayer].getAbility(2)], players[activePlayer], enemies[Random.Range(0, enemies.Count)]);
-                    }
-                    else
-                    {
-                        currentAction = new Action(abilityList[players[activePlayer].getAbility(2)], players[activePlayer], tempAOE);
-                    }
-                } else if (InputManager.Xbutton())
-                {
-                    if (!abilityList[players[activePlayer].getAbility(3)].getAOE())
-                    {
-                        currentAction = new Action(abilityList[players[activePlayer].getAbility(3)], players[activePlayer], enemies[Random.Range(0, enemies.Count)]);
-                    }
-                    else {
-                        currentAction = new Action(abilityList[players[activePlayer].getAbility(3)], players[activePlayer], tempAOE);
-                    }
-                }
+                
             }
 
             if (!activeFighter)
