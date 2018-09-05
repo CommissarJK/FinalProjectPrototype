@@ -1,4 +1,4 @@
-# FinalProjectPrototype
+# Final Project
 
 This is the Final version of my Final Project for my university degree.
 
